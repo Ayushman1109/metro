@@ -2,6 +2,7 @@ package com.ayushman.metro.admin;
 
 import com.ayushman.metro.tables.Station;
 import com.ayushman.metro.repository.StationRepository;
+import com.ayushman.metro.user.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,9 @@ public class AdminService {
 
     @Autowired
     private StationRepository stationRepository;
+
+    @Autowired
+    private UserService userService;
 
     public List<Station> getAllStations(){
         return stationRepository.findAll();
@@ -46,4 +50,5 @@ public class AdminService {
         }
         stationRepository.delete(station);
     }
+
 }

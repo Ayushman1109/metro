@@ -1,5 +1,6 @@
 package com.ayushman.metro.user;
 
+import com.ayushman.metro.common.TicketRequest;
 import com.ayushman.metro.tables.Station;
 import com.ayushman.metro.tables.Ticket;
 import lombok.Data;
@@ -16,14 +17,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
-    @Data
-    public class TicketRequest {
-        private Long sourceId;
-        private Long destinationId;
-        private LocalDate date;
-        private LocalTime time;
-    }
 
     @GetMapping
     public List<Ticket> getAllTickets(){
