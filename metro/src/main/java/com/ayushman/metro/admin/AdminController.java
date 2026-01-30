@@ -15,7 +15,6 @@ public class AdminController {
 
     @Autowired
     private AdminService adminService;
-    private UserService userService;
 
     @GetMapping("/station")
     public List<Station> getAllStations(){
@@ -34,22 +33,17 @@ public class AdminController {
 
     @DeleteMapping("/ticket/{id}")
     public void deleteTicket(@PathVariable Long id){
-        userService.deleteTicket(id);
+        adminService.deleteTicket(id);
     }
 
     @GetMapping("/ticket")
     public List<Ticket> getAllTickets(){
-        return userService.getAllTickets();
+        return adminService.getAllTickets();
     }
 
     @PostMapping("/ticket")
     public Ticket createTicket(@RequestBody TicketRequest ticketRequest){
-        return userService.createTicket(
-                ticketRequest.getSourceId(),
-                ticketRequest.getDestinationId(),
-                ticketRequest.getDate(),
-                ticketRequest.getTime()
-        );
+        return adminService.createTicket(ticketRequest);
     }
 
 }

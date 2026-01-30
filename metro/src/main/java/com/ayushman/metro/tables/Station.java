@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Data
@@ -15,6 +17,5 @@ public class Station {
     private Long id;
     private String name;
     @ElementCollection(fetch = FetchType.EAGER)
-    private List<Long> adj = new ArrayList<>();
-
+    private Map<Long,Double> adj = new HashMap<>();
 }

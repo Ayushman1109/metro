@@ -22,15 +22,15 @@ public class UserService {
     @Autowired
     private StationRepository stationRepository;
 
-    public List<Ticket> getAllTickets(){
-        return ticketRepository.findAll();
+    public List<Station> getAllStations(){
+        return stationRepository.findAll();
     }
 
-    public Ticket createTicket(Long sourceId, Long destinationId, LocalDate date, LocalTime time){
+    public Ticket bookTicket(Long sourceId, Long destinationId, LocalDate date, LocalTime time){
         Ticket ticket = Ticket.builder()
                 .source(stationRepository.findById(sourceId).orElseThrow())
                 .destination(stationRepository.findById(destinationId).orElseThrow())
-                .price(getDist(sourceId, destinationId))
+                .price(getPrice(sourceId, destinationId))
                 .date(date)
                 .time(time)
                 .build();
@@ -42,33 +42,45 @@ public class UserService {
         ticketRepository.delete(ticket);
     }
 
-    public Integer getDist(Long station1Id, Long station2Id){
-        Integer dist = 0;
-        Queue<Long> q = new ArrayDeque<>();
-        q.offer(station1Id);
-        Map<Long, Long> m = new HashMap<>();
-        m.put(station1Id, station1Id);
+    public Double getDist(Long station1Id, Long station2Id){
+        Map<Long, Double> shortestDistances = new HashMap<>();
+        shortestDistances.put(station1Id, 0.0);
+
+        PriorityQueue<Map.Entry<Long, Double>> q = new PriorityQueue<>(Map.Entry.comparingByValue());
+        q.offer(new AbstractMap.SimpleEntry<>(station1Id, 0.0));
+
         while(!q.isEmpty()){
-            Long id = q.poll();
+            Map.Entry<Long, Double> curr = q.poll();
+            Long id = curr.getKey();
+            Double distance = curr.getValue();
+
+            if (id.equals(station2Id)) {
+                return distance;
+            }
+            if (distance > shortestDistances.getOrDefault(id, Double.MAX_VALUE)) {
+                continue;
+            }
+
             Station station = stationRepository.findById(id).orElseThrow();
-            if(station.getId().equals(station2Id)) break;
-            List<Long> adj = station.getAdj();
-            for(Long i : adj){
-                if(!m.containsKey(i)) {
-                    q.offer(i);
-                    m.put(i, station.getId());
+            Map<Long, Double> adj = station.getAdj();
+
+            for (Long neighbourId: adj.keySet()) {
+                if (adj.get(neighbourId) == null) continue;
+                Double newDist = distance + adj.get(neighbourId);
+                if (newDist < shortestDistances.getOrDefault(neighbourId, Double.MAX_VALUE)) {
+                    shortestDistances.put(neighbourId, newDist);
+                    q.offer(new AbstractMap.SimpleEntry<>(neighbourId, newDist));
                 }
             }
         }
-        if (!m.containsKey(station2Id)) {
-            return -1;
-        }
-        Long stationId = station2Id;
-        while(!(stationId.equals(station1Id))){
-            dist++;
-            stationId = m.get(stationId);
-        }
-        return dist;
+        throw new NoSuchElementException("No path found between the selected stations");
+    }
+
+    public Integer getPrice(Long station1Id, Long station2Id){
+        Double distance = getDist(station1Id, station2Id);
+        if(distance < 5.0) return 20;
+        else if(distance < 12.0) return 30;
+        else return 40;
     }
 
 }
