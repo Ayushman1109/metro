@@ -21,17 +21,17 @@ public class AdminController {
         return adminService.getAllStations();
     }
 
-    @PostMapping("/station")
+    @PostMapping("/create/station")
     public Station createStation(@RequestBody Station station){
         return adminService.createStation(station);
     }
 
-    @DeleteMapping("/station/{id}")
+    @DeleteMapping("/delete/station/{id}")
     public void deleteStation(@PathVariable Long id){
         adminService.deleteStation(id);
     }
 
-    @DeleteMapping("/ticket/{id}")
+    @DeleteMapping("/delete/ticket/{id}")
     public void deleteTicket(@PathVariable Long id){
         adminService.deleteTicket(id);
     }
@@ -41,7 +41,7 @@ public class AdminController {
         return adminService.getAllTickets();
     }
 
-    @PostMapping("/ticket")
+    @PostMapping("/create/ticket")
     public Ticket createTicket(@RequestBody TicketRequest ticketRequest){
         return adminService.createTicket(ticketRequest);
     }
