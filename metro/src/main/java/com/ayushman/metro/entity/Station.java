@@ -1,11 +1,9 @@
-package com.ayushman.metro.tables;
+package com.ayushman.metro.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Entity

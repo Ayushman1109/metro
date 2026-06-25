@@ -1,4 +1,4 @@
-package com.ayushman.metro.tables;
+package com.ayushman.metro.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,14 +19,11 @@ public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "source_id")
-    private Station source;
-    @ManyToOne
-    @JoinColumn(name = "destination_id")
-    private Station destination;
-    private LocalDate date;
-    private LocalTime time;
+    @Column(name = "user_id")
+    private Long userId;
+    private Long sourceId;
+    private Long destinationId;
+    private LocalDate bookingDate;
+    private LocalTime bookingTime;
     private Integer price;
-
 }

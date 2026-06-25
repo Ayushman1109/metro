@@ -1,6 +1,6 @@
 package com.ayushman.metro.repository;
 
-import com.ayushman.metro.tables.Station;
+import com.ayushman.metro.entity.Station;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
